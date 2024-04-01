@@ -8,3 +8,5 @@ pip install sympy
 pip install pyfglet
 pip install rich
 pip install sympy
+
+in case you don't see it with the nice gui in console download another terminla from : https://apps.microsoft.com/detail/9n0dx20hk701?hl=es-ar&gl=AR
