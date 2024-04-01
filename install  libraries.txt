@@ -1,0 +1,10 @@
+install these libraries
+----------------------------------
+pip install numpy
+pip install matplpotlib
+pip install tabulate
+pip install colorama
+pip install sympy
+pip install pyfglet
+pip install rich
+pip install sympy
