@@ -104,14 +104,19 @@ def menu():
                         fx,f,intervalo_x1,intervalo_x2,criterio_toleranza,aux_metodos=pedir_datos(respuesta)
                         aux_intervalox1=intervalo_x1
                         aux_intervalox2=intervalo_x2
-                        funcion,solucion,contador,intervalo_x1,intervalo_x2,arr,arr2,arr3,arr4,arr5,bandera=metodo_newtonRaphson(f,intervalo_x1,intervalo_x2,criterio_toleranza,fx)
-                
-                        if bandera==0:
-                            aux_solucion=float(solucion)
-                            mostrar_resultado(funcion,solucion,contador,intervalo_x1,intervalo_x2,arr,arr2,arr3,arr4,arr5,aux_metodos)
-                            print(mostrar_grafica(fx,f,aux_solucion,aux_intervalox1,aux_intervalox2,respuesta))
+                        derivada=diff(f)
+                        if abs(derivada.subs(x, intervalo_x1)) < 0.00000001:
+                            console.print(":x: [red] La derivada en el punto de partida es cercana a cero, no se podra aplicar el metodo desde este punto. [/red]")
+                            with Console().status('Esperando para ingresar los datos nuevamente',spinner='aesthetic'):
+                                sleep(4)
+                        else:
+                            funcion,solucion,contador,intervalo_x1,intervalo_x2,arr,arr2,arr3,arr4,arr5,bandera=metodo_newtonRaphson(f,derivada,intervalo_x1,intervalo_x2,criterio_toleranza,fx)
+                            if bandera==0:
+                                aux_solucion=float(solucion)
+                                mostrar_resultado(funcion,solucion,contador,intervalo_x1,intervalo_x2,arr,arr2,arr3,arr4,arr5,aux_metodos)
+                                print(mostrar_grafica(fx,f,aux_solucion,aux_intervalox1,aux_intervalox2,respuesta))
                             
-                            break
+                                break
                            
           
             elif respuesta.upper()=='D':
@@ -175,7 +180,7 @@ def pedir_datos(arr):
                 except ValueError:
                      console.print(':x: [red] Deben de Ingrersar unicamente NUMEROS :x: [/red]\n')
 
-            if arr=="C":
+            if arr.upper()=="C":
                     intervalo_x2=None
             else:
                         
@@ -209,7 +214,7 @@ def mostrar_grafica(fx,funcion_ingresada,raiz,intervalo_x1,intervalo_x2,metodo):
      plt.ioff()
      matplotlib.is_interactive()
 
-     if metodo!="C":
+     if metodo.upper()!="C":
         
         if(intervalo_x1 >=0 ) and (intervalo_x2 >=0):
         
@@ -452,10 +457,9 @@ def metodo_de_biseccion (funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
         
         return None, None,None,None,None,None, None,None,None,None,bandera
      
-def metodo_newtonRaphson(funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
+def metodo_newtonRaphson(funcion,derivada,intervalo_x1,intervalo_x2,error_relativo,fx):
      
-     derivada=diff(funcion)
-
+     
      error_calculado=101
      solucion=None
      contador=0
@@ -465,8 +469,8 @@ def metodo_newtonRaphson(funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
      arr4=[]
      arr5=[]
      intervalo_x2=None
-     bandera=0
-
+     bandera=0 
+     
      while  error_calculado > error_relativo:
           
           contador+=1
@@ -476,7 +480,7 @@ def metodo_newtonRaphson(funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
 
           con='{:.0f} '.format(contador)
           arr.append(con)
-          a='{:.10f} '.format(float(intervalo_x1)) #x-exp(-x)
+          a='{:.10f} '.format(float(intervalo_x1))
           arr2.append(a)
           sol='{:.10f} '.format(float(solucion))
           solucion2=str(sol)
@@ -485,7 +489,7 @@ def metodo_newtonRaphson(funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
           error=str(error_calculado_pasado)+"%"
           arr5.append(error)
 
-
+     
      return funcion,solucion2,contador,intervalo_x1,intervalo_x2,arr,arr2,arr3,arr4,arr5,bandera
      
 def metodo_secante(funcion,intervalo_x1,intervalo_x2,error_relativo,fx):
